@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GitHub Repository Monitor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #3498db;
+            --background-color: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 1rem;
+            color: white;
+            box-shadow: var(--card-shadow);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .search-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-form input,
+        .search-form select {
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-form input:focus,
+        .search-form select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .search-form button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 0;
+        }
+
+        .repo-item {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .repo-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .repo-item h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .repo-item a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .repo-item p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🚀 GitHub Repository Monitor</h1>
+            <p>Discover trending repositories in your favorite programming language</p>
+        </header>
+
+        <form class="search-form" method="POST">
+            <input type="text" name="language" placeholder="Programming Language (optional)">
+            <input type="text" name="topic" placeholder="Topic or keywords (required)" required>
+            <select name="sort">
+                <option value="stars">Most Stars</option>
+                <option value="forks">Most Forks</option>
+                <option value="updated">Recently Updated</option>
+            </select>
+            <button type="submit">🔍 Search Repositories</button>
+        </form>
+
+        {% if results %}
+        <ul class="results">
+            {% for repo in results %}
+            <li class="repo-item">
+                <h3><a href="{{ repo.html_url }}" target="_blank">{{ repo.name }}</a></h3>
+                <p>{{ repo.description }}</p>
+                <div class="stats">
+                    <span class="stat-item">⭐ {{ repo.stargazers_count }}</span>
+                    <span class="stat-item">🍴 {{ repo.forks_count }}</span>
+                    <span class="stat-item">👀 {{ repo.watchers_count }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
