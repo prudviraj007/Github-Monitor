@@ -1,9 +1,15 @@
 {
     "version": 2,
     "builds": [
-        {"src": "GithubMonitor.py", "use": "@vercel/python"}
+        {
+            "src": "GithubMonitor.py",
+            "use": "@vercel/python"
+        }
     ],
     "routes": [
-        {"src": "/(.*)", "dest": "GithubMonitor.py"}
+        {
+            "src": "/(.*)",
+            "dest": "GithubMonitor.py"
+        }
     ]
 }
